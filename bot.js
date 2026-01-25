@@ -2,7 +2,6 @@
 import { createBot } from 'mineflayer'
 import { loader as autoEat } from 'mineflayer-auto-eat'
 import minecraftData from 'minecraft-data'
-import AutoAuth from 'mineflayer-auto-auth'
 import fs from 'fs'
 import { config } from 'dotenv'
 import express from 'express'
@@ -469,7 +468,6 @@ function setupBotEventHandlers() {
   bot.once('spawn', async () => {
     console.log('[SPAWN] Bot spawned as ' + bot.username + ' at ' + JSON.stringify(bot.entity ? bot.entity.position : null))
     try { bot.loadPlugin(autoEat); console.log('[SPAWN] AutoEat loaded') } catch (e) { console.error('[SPAWN] AutoEat failed', e.message) }
-    try { bot.loadPlugin(AutoAuth); console.log('[SPAWN] AutoAuth loaded') } catch (e) { console.error('[SPAWN] AutoAuth failed', e.message) }
 
     // Start prismarine viewer on internal port
     try {
@@ -587,12 +585,6 @@ async function initializeBot() {
         port: parseInt(process.env.BOT_PORT || '25565', 10),
         username: process.env.BOT_USERNAME || 'phyll',
         auth: process.env.BOT_AUTH || 'offline',
-        plugins: [AutoAuth],
-        AutoAuth: {
-          password: process.env.BOT_PASSWORD,
-          logging: true,
-          ignoreRepeat: true
-        },
         connectTimeout: 30000,
         checkTimeoutInterval: 10000,
         version: baseVersion
@@ -610,12 +602,6 @@ async function initializeBot() {
             port: parseInt(process.env.BOT_PORT || '25565', 10),
             username: process.env.BOT_USERNAME || 'phyll',
             auth: process.env.BOT_AUTH || 'offline',
-            plugins: [AutoAuth],
-            AutoAuth: {
-              password: process.env.BOT_PASSWORD,
-              logging: true,
-              ignoreRepeat: true
-            },
             connectTimeout: 30000,
             checkTimeoutInterval: 10000,
             version: fallbackVersionEnv
