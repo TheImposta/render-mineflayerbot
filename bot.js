@@ -1,7 +1,6 @@
 import 'dotenv/config'
 import mineflayer from 'mineflayer'
 import { pathfinder, Movements } from 'mineflayer-pathfinder'
-import { plugin as autoEat } from 'mineflayer-auto-eat'
 import express from 'express'
 import { createProxyMiddleware } from 'http-proxy-middleware'
 
@@ -10,7 +9,7 @@ import { createProxyMiddleware } from 'http-proxy-middleware'
 ======================== */
 const BOT_HOST = process.env.MC_HOST
 const BOT_PORT = Number(process.env.MC_PORT || 25565)
-const BOT_USERNAME = process.env.MC_USERNAME || 'viewerbot'
+const BOT_USERNAME = process.env.MC_USERNAME || 'renderbot'
 const BOT_VERSION = process.env.MC_VERSION || false
 
 const WEB_PORT = process.env.PORT || 3000
@@ -28,19 +27,8 @@ const bot = mineflayer.createBot({
 })
 
 bot.loadPlugin(pathfinder)
-bot.loadPlugin(autoEat)
 
-/* ========================
-   AUTO-EAT CONFIG
-======================== */
 bot.once('spawn', () => {
-  bot.autoEat.enable()
-  bot.autoEat.options = {
-    priority: 'foodPoints',
-    startAt: 16,
-    bannedFood: []
-  }
-
   const mcData = bot.registry
   const movements = new Movements(bot, mcData)
   bot.pathfinder.setMovements(movements)
@@ -49,8 +37,7 @@ bot.once('spawn', () => {
 })
 
 /* ========================
-   SUPPRESS CHAT HUD SPAM
-   (Mana / Actionbar spam)
+   SUPPRESS ACTIONBAR SPAM
 ======================== */
 bot.on('message', (msg, position) => {
   if (position === 'actionBar') return
@@ -78,7 +65,7 @@ app.get('/', (_, res) => {
 
 /* ========================
    VIEWER PROXY
-   (NO SPAM if viewer down)
+   (NO SPAM if viewer off)
 ======================== */
 app.use(
   '/viewer',
@@ -100,7 +87,6 @@ app.listen(WEB_PORT, () => {
 
 /* ========================
    OPTIONAL VIEWER
-   (Only start if enabled)
 ======================== */
 if (process.env.ENABLE_VIEWER === 'true') {
   const { mineflayer: viewer } = await import('prismarine-viewer')
