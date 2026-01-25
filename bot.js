@@ -53,7 +53,7 @@ const VIEWER_HOST_INTERNAL = process.env.VIEWER_HOST || '127.0.0.1'
 const VIEWER_TARGET = `http://${VIEWER_HOST_INTERNAL}:${VIEWER_PORT_INTERNAL}`
 
 // ---------- Persistent state and files ----------
-const ownerName = process.env.OWNER_NAME || 'TryChloroform'
+const ownerName = process.env.OWNER_NAME
 const botNames = process.env.BOT_NAMES ? process.env.BOT_NAMES.split(',') : ['trychlorophyll', 'phyll']
 let trustedPlayers = [ownerName]
 let ignoredPlayers = []
